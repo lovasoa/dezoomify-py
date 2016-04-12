@@ -115,10 +115,8 @@ def open_url(url, retry=5):
     try:
         return opener.open(request)
     except urllib.error.URLError as e:
-        print("Failed download: %s" % (url,))
         if retry==0: raise e
         else:
-            print("Retrying in %d seconds" % (2**(5-retry),))
             time.sleep(2**(5-retry))
             return open_url(url, retry-1)
 
