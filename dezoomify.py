@@ -156,8 +156,8 @@ class ImageUntiler():
         self.log = logging.getLogger(__name__)
 
         # Set up jpegtran.
-        if self.jpegtran is None:  # we need to locate jpegtran
-            mod_dir = os.path.dirname(__file__)  # location of this script
+        if self.jpegtran == None:  # we need to locate jpegtran
+            mod_dir = os.path.dirname(os.path.abspath(__file__))  # location of this script
             if platform.system() == 'Windows':
                 jpegtran = os.path.join(mod_dir, 'jpegtran.exe')
             else:
@@ -181,19 +181,16 @@ class ImageUntiler():
             raise JpegtranException
 
         try:
-            subproc = subprocess.Popen([self.jpegtran, '--help'], stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
-            jpegtran_help_info = str(subproc.communicate(timeout=5))
-            if '-drop' not in jpegtran_help_info:
-                self.log.error("{} does not have the '-drop' feature. "
-                               "Either use the jpegtran supplied with Dezoomify or get it from "
-                               "http://jpegclub.org/jpegtran/ section \"3. Lossless crop 'n' drop (cut & paste)\" to fix the problem."
-                .format(self.jpegtran))
-                subproc.kill()
-                raise JpegtranException
-        except Exception:
-            subproc.kill()
-            self.log.error("Communication with Jpegtran has failed and the process was killed.")
-            raise JpegtranException
+            with subprocess.Popen([self.jpegtran, '--help'], stdout=subprocess.DEVNULL, stderr=subprocess.PIPE) as subproc:
+                jpegtran_help_info = str(subproc.communicate(timeout=5))
+                if '-drop' not in jpegtran_help_info:
+                    self.log.error("{} does not have the '-drop' feature. "
+                                   "Either use the jpegtran supplied with Dezoomify or get it from "
+                                   "http://jpegclub.org/jpegtran/ section \"3. Lossless crop 'n' drop (cut & paste)\" to fix the problem."
+                    .format(self.jpegtran))
+                    raise JpegtranException
+        except Exception as e:
+            self.log.error("Unable to start jpegtran: %s" % (e))
 
         self.tile_dir = None
         self.get_url_list(args.url, args.list)
