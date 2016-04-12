@@ -29,6 +29,7 @@ import urllib.request
 import urllib.parse
 import platform
 import itertools
+import time
 from multiprocessing.pool import ThreadPool
 
 # Progressbar module is optional but recommended.
@@ -84,7 +85,7 @@ parser.add_argument('-t', dest='nthreads', action='store', default=16, type=int,
 parser.add_argument('-v', dest='verbose', action='count', default=0,
                     help="increase verbosity (-vv for more)")
 
-def open_url(url):
+def open_url(url, retry=5):
     """
     Similar to urllib.request.urlopen,
     except some additional preparation is done on the URL and
@@ -92,13 +93,14 @@ def open_url(url):
 
     Keyword arguments:
     url -- the URL to open
+    retry -- the number of times to retry
     """
 
     # Escape the path part of the URL so spaces in it would not confuse the server.
     scheme, netloc, path, qs, anchor = urllib.parse.urlsplit(url)
     path = urllib.parse.quote(path, '/%:|')
     qs = urllib.parse.quote_plus(qs, ':&=')
-    url = urllib.parse.urlunsplit((scheme, netloc, path, qs, anchor))
+    safe_url = urllib.parse.urlunsplit((scheme, netloc, path, qs, anchor))
 
     # spoof the user-agent and referrer, in case that matters.
     req_headers = {
@@ -106,11 +108,20 @@ def open_url(url):
         'Referer': 'http://google.com'
     }
     # create a request object for the URL
-    request = urllib.request.Request(url, headers=req_headers)
+    request = urllib.request.Request(safe_url, headers=req_headers)
     # create an opener object
     opener = urllib.request.build_opener()
     # open a connection and receive the http response headers + contents
-    return opener.open(request)
+    try:
+        return opener.open(request)
+    except urllib.error.URLError as e:
+        print("Failed download: %s" % (url,))
+        if retry==0: raise e
+        else:
+            print("Retrying in %d seconds" % (2**(5-retry),))
+            time.sleep(2**(5-retry))
+            return open_url(url, retry-1)
+
 
 
 def download_url(url, destination):
