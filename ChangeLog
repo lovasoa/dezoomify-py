@@ -1,0 +1,208 @@
+2014-11-18  Martin Valgur  <martin.valgur@gmail.com>
+
+	Created a test suite for Dezoomify. Currently only some of the most central functionality is tested.
+
+	Extended zoom level options.
+
+	Adjusted logging levels. Verbosity level zero now prints only warnings and errors.
+
+	Added an underscore to batch mode filename numbering.
+
+	Exceptions during processing of an individual image in batch mode are now ignored.
+
+2014-04-10  Martin Valgur  <martin.valgur@gmail.com>
+
+	File URIs used on Windows are now properly supported.
+
+2013-12-27  Martin Valgur  <martin@valgur.ee>
+
+	Fixed bug: downloading progress was not being updated. Joining progressbar crashed, since downloading progressbar was not finished. Fixed bug: Numeric suffix in batch mode contained spaces, not zeros.
+
+2013-12-05  Martin Valgur  <martin@valgur.ee>
+
+	Discarded the old jpegtran untiling algorithm, the new one is the only option now. Rearranged the progressbar-related code to be closer together.
+
+2013-11-26  Lukáš Říha  <cedel@centrum.cz>
+
+	Untiling - jt_xl - empty space instead of broken tile.
+	Unusable tile image (that was downloaded but is broken in some way -
+	jpegtran cannot process it) now produces an empty space, instead of a
+	neigbouring image from a previous iteration beiing used.
+
+	Minor refactoring - more meaningful variable names.
+
+2013-11-25  Lukáš Říha  <cedel@centrum.cz>
+
+	Very minor correction.
+
+	Remove unused variable (merge change from pillow branch)
+
+2013-11-24  Lukáš Říha  <cedel@centrum.cz>
+
+	Added another joining algorithm, switching mechanics + smaller changes.
+	* Added faster jpegtran untiling algorithm
+	* Added switching mechanism to switch untiling algorithm
+	* Added untiler algorithm info to displayed debug info
+	* Moved chunk of common progressbar update code to a separate function
+	* Added developer to README
+
+	Revert "Added another joining algorithm, switching mechanics + smaller changes."
+	This reverts commit c1f055aea8ea7a5dc8993abc0c88c361d82581f0.
+
+	Added another joining algorithm, switching mechanics + smaller changes.
+	* Added faster jpegtran untiling algorithm
+	* Added switching mechanism to switch untiling algorithm
+	* Moved chunk of common progressbar update code to a separate function
+	* Added developer to README
+
+2013-11-23  forquest  <cedel@centrum.cz>
+
+	Merge branch 'master' of git://git.code.sf.net/p/dezoomify/code
+
+2013-11-21  Martin Valgur  <martin@valgur.ee>
+
+	Edited usage information to be clearer and more helpful.
+
+2013-11-21  forquest  <cedel@centrum.cz>
+
+	Improve URL list (-l switch) handling - check for and ignore empty lines.
+
+2013-11-21  Martin Valgur  <martin@valgur.ee>
+
+	Use '--help' instead of '--nonsense' as a parameter when checking for the -drop feature of jpegtran.
+
+2013-11-21  forquest  <cedel@centrum.cz>
+
+	Modified the help to be more of use.
+
+	Corrected tab vs. space in description of -l parameter.
+
+2013-11-20  forquest  <cedel@centrum.cz>
+
+	Modify checking for -drop feature of jpegtran, so it won't timeout silently and give a user sensible response.
+
+2013-10-10  Martin Valgur  <martin@valgur.ee>
+
+	Converted variable names from CamelCase to lower_case_with_underscores to conform with PEP8.
+
+	Some overall tidying of the code.
+
+	Fixed tabs-spaces inconsistency in README.
+
+	Adjusted usage instructions.
+
+2013-10-09  Martin Valgur  <martin@valgur.ee>
+
+	Tiny bit more compact code for ZoomifyImagePath searching.
+
+2013-10-08  Martin Valgur  <martin@valgur.ee>
+
+	Dezoomify now checks that the supplied jpegtran has the '-drop' feature.
+
+	Dezoomify now checks that the jpegtran being used has the '-drop' feature.
+
+2013-10-07  Martin Valgur  <martin@valgur.ee>
+
+	More efficient ImageProperties.xml processing.
+
+	Base directory input parameter can now end with 'ImageProperties.xml'. Better HTTP error handling. Misc. small adjustments.
+
+	* Added progressbars to tile downloading & joining via (optional) progressbar module. * Removed the jpeg-8c_patch. The new (2012-10-05) version of jpegtran (that includes the drop patch) has the required functionality now. The jpegtran binaries bundled with dezoomify (for convenience) were replaced with the official ones. * Cleaned up the threaded downloading somewhat. * Fixed temporary directories not always being deleted in case of some exceptions.
+
+2013-02-26  Martin Valgur  <martin@valgur.ee>
+
+	Fixed handling of HTTP errors. Fixed a bug with zoomlevels.
+
+	Stripped some more symbols from the jpegtran.exe executable.
+
+	Modified the zoomlevel calculation code based on a suggestion at https://sourceforge.net/p/dezoomify/discussion/general/thread/784798c8/ .
+
+	Stripped debugging symbols from jpegtran executables.
+
+	Fixed a small bug that slipped in with the last commit. Made jpegtran excecutable detection more robust.
+
+2013-02-25  Martin Valgur  <martin@valgur.ee>
+
+	Reformatted the code a bit with PEP8 in mind.
+
+	All output now uses Python's logging module. Made the command line arguments -i and -o positional.
+
+	Made URL retrieval and file downloading more consistent.
+
+2012-05-26  Martin Valgur  <martin@valgur.ee>
+
+	Removed some not-too-important debugging output.
+
+	Added one more Zoomify base path detection for newer Zoomify versions.
+
+2012-05-24  Martin Valgur  <quibik@gmail.com>
+
+	Fixed a bug of image creation failing when one or more tiles are missing on the server.
+
+2012-03-31  Martin Valgur  <quibik@gmail.com>
+
+	Rebuilt jpegtran.exe statically (no msvcr100.dll dependency anymore). Optimized it slightly by modifying build options.
+
+2012-03-31  Martin Valgur  <kvib@users.sourceforge.net>
+
+	Added additional regex check for HTML5 version of Zoomify.
+
+2012-03-30  Martin Valgur  <kvib@users.sourceforge.net>
+
+	Fixed two bugs: * URLs given via the -i parameter did not work (because of a typo in code). * getUrl() failed to download URLs with spaces in them. Fixed by escaping non-standard characters in the URL.
+
+2012-02-05  Inductiveload  <inductiveload@gmail.com>
+
+	More robust jpegtran location, broke dezoomify-specific code out to a separate class as a prelude to a more modular system
+
+2011-10-17  Inductiveload  <inductiveload@gmail.com>
+
+	Add GUI fiddlings, installation instructions in README
+
+2011-10-07  Martin Valgur  <kvib@users.sourceforge.net>
+
+	Fixed a bug with the -t parameter. Raised the default number of threads to 16.
+
+	Tile downloading and joining are now done simultaneously.
+
+	Unicode decoding errors are now ignored (bulk of the website contents is irrelevant anyway).
+
+2011-10-06  Martin Valgur  <kvib@users.sourceforge.net>
+
+	Added my e-mail address to the contact list.
+
+	Merge remote-tracking branch 'origin/master'
+	* origin/master:
+	  Add README file, with licensing
+	  Sensible warning and exit if Python < 3 is used
+	  Add icon, and sensible warning if Python <3 is used
+
+2011-10-06  Inductiveload  <inductiveload@gmail.com>
+
+	Add README file, with licensing
+
+2011-10-06  Martin Valgur  <kvib@users.sourceforge.net>
+
+	Fixed a bug in command line parameter handling.
+
+2011-10-06  Inductiveload  <inductiveload@gmail.com>
+
+	Sensible warning and exit if Python < 3 is used
+
+	Add icon, and sensible warning if Python <3 is used
+
+2011-10-06  Martin Valgur  <kvib@users.sourceforge.net>
+
+	Proper Linux build of jpegtran this time (32-bit for wider compatibility).
+
+	Reverted jpegtran to the initial version. The version I commited was just a shell script *facepalm*.
+
+	Converted the line endings in dezoomify.py to Unix style. Changed shebang to point to python3.
+
+	The jpegtran executable is now patched. Included the source code of the patch.
+
+	* Made all path name concatenations use os.path.join(). * Fixed a bug at the JPEG optimization step. Output was directed to stdout, not the JPEG file.
+
+2011-10-04  Inductiveload  <inductiveload@gmail.com>
+
+	Initial commit.
