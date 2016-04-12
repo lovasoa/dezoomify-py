@@ -579,7 +579,7 @@ class UntilerDezoomify(ImageUntiler):
         # NEEDED TO RECONSTRUCT (WIDTH, HEIGHT AND TILESIZE)
 
         # this file contains information about the image tiles
-        xml_url = urllib.parse.urljoin(base_dir, 'ImageProperties.xml')
+        xml_url = base_dir + 'ImageProperties.xml'
 
         self.log.debug("xml_url=" + xml_url)
         content = None
