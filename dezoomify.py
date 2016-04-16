@@ -99,7 +99,7 @@ def open_url(url, retry=5):
     # Escape the path part of the URL so spaces in it would not confuse the server.
     scheme, netloc, path, qs, anchor = urllib.parse.urlsplit(url)
     path = urllib.parse.quote(path, '/%:|')
-    qs = urllib.parse.quote_plus(qs, ':&=')
+    qs = urllib.parse.quote_plus(qs, ':&=/')
     safe_url = urllib.parse.urlunsplit((scheme, netloc, path, qs, anchor))
 
     # spoof the user-agent and referrer, in case that matters.
