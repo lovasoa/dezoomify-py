@@ -209,7 +209,9 @@ class ImageUntiler():
             self.process_image(self.image_urls[0], self.out_names[0])
             self.log.info("Dezoomifed image created and saved to {}.".format(self.out_names[0]))
         else:
+            zoom_level = self.zoom_level
             for i, image_url in enumerate(self.image_urls):
+                self.zoom_level = zoom_level # Reinitialize zoom level between each download
                 destination = self.out_names[i]
                 self.log.info("[{}/{}] Processing image {}...".format(i + 1, len(self.image_urls), image_url))
                 try:
