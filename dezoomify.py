@@ -216,10 +216,10 @@ class ImageUntiler():
                 self.log.info("[{}/{}] Processing image {}...".format(i + 1, len(self.image_urls), image_url))
                 try:
                     self.process_image(image_url, destination)
+                    self.log.info("Dezoomifed image created and saved to {}.".format(destination))
                 except Exception as e:
                     if not isinstance(e, (FileNotFoundError, JpegtranException, ZoomLevelError)):
                         self.log.warning("Unknown exception occurred while processing image {}: {} ()".format(image_url, e.__class__.__name__, e))
-                self.log.info("Dezoomifed image created and saved to {}.".format(destination))
 
     def process_image(self, image_url, destination):
         """Scrapes image info and calls the untiler."""
@@ -261,7 +261,7 @@ class ImageUntiler():
         joining_progressbar = None
         if progressbar:
             download_progressbar = progressbar.ProgressBar(
-                widgets=['Downloading tiles: ',
+                widgets=['Loading tiles: ',
                          progressbar.Counter(), '/', str(self.num_tiles), ' ',
                          progressbar.Bar('>', left='[', right=']'), ' ',
                          progressbar.ETA()],
@@ -299,7 +299,7 @@ class ImageUntiler():
             url = self.get_tile_url(col, row)
             destination = local_tile_path(col, row)
             if not progressbar:
-                self.log.debug("Downloading tile (row {:3}, col {:3})".format(row, col))
+                self.log.debug("Loading tile (row {:3}, col {:3})".format(row, col))
             try:
                 download_url(url, destination)
             except urllib.error.HTTPError as e:
@@ -633,13 +633,13 @@ class UntilerDezoomify(ImageUntiler):
         self.maxx_tiles, self.maxy_tiles = self.levels[-1]
         self.x_tiles, self.y_tiles = self.levels[self.zoom_level]
 
-        self.log.debug('\tMax zoom level:    {:d} (working zoom level: {:d})'.format(self.max_zoom, self.zoom_level))
-        self.log.debug('\tWidth (overall):   {:d} (at given zoom level: {:d})'.format(self.max_width, self.width))
-        self.log.debug('\tHeight (overall):  {:d} (at given zoom level: {:d})'.format(self.max_height, self.height))
-        self.log.debug('\tTile size:         {:d}'.format(self.tile_size))
-        self.log.debug('\tWidth (in tiles):  {:d} (at given level: {:d})'.format(self.maxx_tiles, self.x_tiles))
-        self.log.debug('\tHeight (in tiles): {:d} (at given level: {:d})'.format(self.maxy_tiles, self.y_tiles))
-        self.log.debug('\tTotal tiles:       {:d} (to be retrieved: {:d})'.format(self.maxx_tiles * self.maxy_tiles,
+        self.log.debug('Max zoom level:    {:d} (working zoom level: {:d})'.format(self.max_zoom, self.zoom_level))
+        self.log.debug('Width (overall):   {:d} (at given zoom level: {:d})'.format(self.max_width, self.width))
+        self.log.debug('Height (overall):  {:d} (at given zoom level: {:d})'.format(self.max_height, self.height))
+        self.log.debug('Tile size:         {:d}'.format(self.tile_size))
+        self.log.debug('Width (in tiles):  {:d} (at given level: {:d})'.format(self.maxx_tiles, self.x_tiles))
+        self.log.debug('Height (in tiles): {:d} (at given level: {:d})'.format(self.maxy_tiles, self.y_tiles))
+        self.log.debug('Total tiles:       {:d} (to be retrieved: {:d})'.format(self.maxx_tiles * self.maxy_tiles,
                                                                                  self.x_tiles * self.y_tiles))
         # self.log.debug("\tUsing {} joining algorithm.".format(self.algorithm))
 
