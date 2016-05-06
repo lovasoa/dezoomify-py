@@ -209,6 +209,7 @@ class ImageUntiler():
             self.process_image(self.image_urls[0], self.out_names[0])
             self.log.info("Dezoomifed image created and saved to {}.".format(self.out_names[0]))
         else:
+            failed_downloads = []
             zoom_level = self.zoom_level
             for i, image_url in enumerate(self.image_urls):
                 self.zoom_level = zoom_level # Reinitialize zoom level between each download
@@ -218,8 +219,17 @@ class ImageUntiler():
                     self.process_image(image_url, destination)
                     self.log.info("Dezoomifed image created and saved to {}.".format(destination))
                 except Exception as e:
+                    # The file couldn't be downloaded. Add it to the list of failed downloads
+                    failed_downloads.append((image_url, destination))
                     if not isinstance(e, (FileNotFoundError, JpegtranException, ZoomLevelError)):
                         self.log.warning("Unknown exception occurred while processing image {}: {} ()".format(image_url, e.__class__.__name__, e))
+
+            if len(failed_downloads) > 0:
+                with open("failed-downloads.txt", 'w') as failed_downloads_file:
+                    for image_info in failed_downloads:
+                        failed_downloads_file.write("%s\t%s\n" % image_info)
+                    self.log.warning("Processing of some files have failed. Their URLs and names have been saved to '%s'."
+                                    % (failed_downloads_file.name))
 
     def process_image(self, image_url, destination):
         """Scrapes image info and calls the untiler."""
