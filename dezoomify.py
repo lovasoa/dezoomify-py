@@ -216,7 +216,7 @@ class ImageUntiler():
                 destination = self.out_names[i]
                 self.log.info("[{}/{}] Processing image {}...".format(i + 1, len(self.image_urls), image_url))
                 try:
-                    self.process_image(image_url, destination)
+                    self.process_image(image_url, os.path.join(os.path.dirname(self.out), destination))
                     self.log.info("Dezoomifed image created and saved to {}.".format(destination))
                 except Exception as e:
                     # The file couldn't be downloaded. Add it to the list of failed downloads
@@ -503,7 +503,7 @@ class ImageUntiler():
                         m = re.search('\\.' + self.ext + '$', line[1])
                         if not m:
                             line[1] += '.' + self.ext
-                        self.out_names.append(os.path.join(os.path.dirname(self.out), line[1]))
+                        self.out_names.append(line[1])
                     else:
                         continue
 
